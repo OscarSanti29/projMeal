@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Bungee+Inline&display=swap');
+@import "tailwindcss";
+
+
+.navbar {
+    background-color: rgb(237, 177, 116);
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    border-bottom: solid;
+}
+
+h2 {
+    font-family: "Bungee inline", sans-serif;
+    font-size: 40px;
+    text-align: center;
+}
+
+h3 {
+    font-family: "Bungee inline", sans-serif;
+    font-size: 15px;
+    text-align: center;
+}
+
+.errors {
+    font-family: "Bungee inline", sans-serif;
+    font-size: 20px;
+}
+
+.mealfinder {
+    font-family: "Bungee inline", sans-serif;
+    font-size: 70px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.button {
+    border: solid;
+    padding: 1px;
+    cursor: pointer;
+    font-size: medium;
+
+}
+
+.category {
+    border: solid;
+}
+
+.searchbar {
+    border: solid;
+}
+
+.meal-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 20px;
+}
+
+.meal-card {
+    border: solid;
+    padding: 5px;
+    text-align: center;
+    background-color: rgb(237, 177, 116);
+    margin: 5px;
+}
+
+
+
+.random {
+    display: flex;
+    flex-direction: row;
+}
+
+.meal-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+img {
+    border-radius: 100%;
+}
