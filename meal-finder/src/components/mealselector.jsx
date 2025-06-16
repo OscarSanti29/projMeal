@@ -33,12 +33,12 @@ export default function Mealslector() {
         <h2 className="text-center">Meals in "{category}" category</h2>
       )}
       {area && <h2> Meals in "{area}" region</h2>}
-      <div className="meal-list">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
         {meals.length > 0 ? (
           meals.map((meal) => (
             <div
               key={meal.idMeal}
-              className="meal-card rounded-lg"
+              className="bg-orange-300 rounded-lg shadow-md p-4 text-center hover:scale-105 transition-transform"
               onClick={() => nav(`/meal/${meal.idMeal}`)}
             >
               <h3 className="my-2">{meal.strMeal}</h3>

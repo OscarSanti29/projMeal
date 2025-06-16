@@ -50,21 +50,6 @@ h3 {
     border: solid;
 }
 
-.meal-list {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    padding: 20px;
-}
-
-.meal-card {
-    border: solid;
-    padding: 5px;
-    text-align: center;
-    background-color: rgb(237, 177, 116);
-    margin: 5px;
-}
 
 
 

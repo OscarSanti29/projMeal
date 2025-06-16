@@ -45,7 +45,7 @@ export default function Searchbar() {
       console.log("Meals by area:", data.meals); // For debug
     }
 
-    fetchMealsByArea(); // ← YOU FORGOT THIS CALL BEFORE
+    fetchMealsByArea();
   }, [selectedArea]);
 
   // Fetch meals when category is selected
@@ -70,23 +70,23 @@ export default function Searchbar() {
   };
 
   return (
-    <div className="navbar">
+    <div className="flex flex-col md:flex-row justify-between items-center gap-4 bg-orange-300 p-4 border-b-4 border-black w-full">
       <h1 className="mealfinder" onClick={() => navigate(`/`)}>
         Meal Finder
       </h1>
 
-      <div className="search-controls">
-        <div>
+      <div className="flex flex-col md:flex-row items-center gap-2 w-full md:w-auto">
+        <div className="flex items-center w-full md:w-auto">
           {" "}
           <input
-            className="searchbar rounded-lg p-1"
+            className="searchbar rounded-lg p-1 w-full md:w-60"
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search meals..."
           />
           <button
-            className="m-2 rounded-lg cursor-pointer text-xl"
+            className="ml-2 rounded-lg cursor-pointer text-xl"
             onClick={handleSearch}
           >
             <i className="fa-solid fa-magnifying-glass"></i>
@@ -99,7 +99,7 @@ export default function Searchbar() {
             navigate(`/category/${e.target.value}`);
           }}
           value={selectedCategory}
-          className="category m-2 p-1 cursor-pointer rounded-lg"
+          className="w-full md:w-52 rounded-lg p-2 border border-2"
         >
           <option value="">Select a category</option>
           {categories.map((cat) => (
@@ -115,7 +115,7 @@ export default function Searchbar() {
             navigate(`/area/${e.target.value}`);
           }}
           value={selectedArea}
-          className="category m-2 p-1 cursor-pointer rounded-lg"
+          className="w-full md:w-52 rounded-lg p-2 border border-2"
         >
           <option value="">Select a region</option>
           {areas.map((area) => (
