@@ -49,11 +49,11 @@ export default function Mealslector() {
               />
               <p>{meal.strCategory}</p>
               <button
-                className="button rounded-lg mt-2 "
+                className="button rounded-lg mt-2 hover:bg-orange-400 transition"
                 key={meal.idMeal}
                 onClick={() => nav(`/meal/${meal.idMeal}`)}
               >
-                Details
+                Recipe
               </button>
             </div>
           ))

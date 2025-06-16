@@ -21,13 +21,19 @@ export default function RandomMeal() {
   }, []);
 
   return (
-    <div className="">
+    <div className="max-w-4xl mx-auto p-4">
       {meal ? (
         <div>
-          <h2> Meal of the day: {meal.strMeal}</h2>
-          <div className="random">
-            <img className="ml-70" src={meal.strMealThumb} />
-            <div className="p-6 text-xl">
+          <h2 className="text-2xl text-center mb-4">
+            {" "}
+            Meal of the day: {meal.strMeal}
+          </h2>
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
+            <img
+              className="w-64 h-64 object-cover rounded-full"
+              src={meal.strMealThumb}
+            />
+            <div className=" text-lg space-y-3">
               {" "}
               <p>
                 {" "}
@@ -39,7 +45,7 @@ export default function RandomMeal() {
                 {meal.strArea}
               </p>{" "}
               <button
-                className=" button rounded-lg"
+                className="mt-2 px-4 py-2 bg-orange-300 border border-black border-2 rounded-lg hover:bg-orange-400 transition"
                 key={meal.idMeal}
                 onClick={() => nav(`/meal/${meal.idMeal}`)}
               >
@@ -49,7 +55,7 @@ export default function RandomMeal() {
           </div>
         </div>
       ) : (
-        <p>Loading...</p>
+        <p className="text-center">Loading...</p>
       )}{" "}
     </div>
   );

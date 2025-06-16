@@ -71,7 +71,10 @@ export default function Searchbar() {
 
   return (
     <div className="flex flex-col md:flex-row justify-between items-center gap-4 bg-orange-300 p-4 border-b-4 border-black w-full">
-      <h1 className="mealfinder" onClick={() => navigate(`/`)}>
+      <h1
+        className="mealfinder hover:scale-105 transition-transform"
+        onClick={() => navigate(`/`)}
+      >
         Meal Finder
       </h1>
 
