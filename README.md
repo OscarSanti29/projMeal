@@ -37,7 +37,9 @@ To run the project on your machine:
    git clone https://github.com/OscarSanti29/projMeal.git
    cd projMeal
 2. **Install dependencies:**
+   ```bash
    npm install
-3. **Start the development server:**
+4. **Start the development server:**
+   ```bash
    npm run dev
-4. Open the browser 
+5. Open your browser and go to http://localhost:5173 
