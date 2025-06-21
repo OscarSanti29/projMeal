@@ -12,12 +12,6 @@ A responsive recipe search application built with React and Tailwind CSS, using 
 - **Routing:** React Router DOM
 - **Deployment:** Vercel (or Netlify)
 
-## 📸 Screenshots
-
-_(Add images to `/public` or use hosted image URLs)_
-
-![Meal Finder Screenshot](./public/screenshot.png)
-
 ## 🧠 Features
 
 - 🔍 Search for meals by name
