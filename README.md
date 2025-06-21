@@ -4,9 +4,7 @@ A responsive recipe search application built with React and Tailwind CSS, using 
 
 ## 🚀 Live Demo
 
-🔗 [https://your-vercel-url.vercel.app](https://your-vercel-url.vercel.app)  
-_(Replace this link once you deploy)_
-
+🔗 [https://mealfinde.netlify.app/]  
 ## 🛠 Tech Stack
 
 - **Frontend:** React, Vite, Tailwind CSS
