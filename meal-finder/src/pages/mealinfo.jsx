@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import Searchbar from "./searchbar";
+import Searchbar from "../components/searchbar";
 
 export default function Mealinfo() {
   const [info, setInfo] = useState(null);

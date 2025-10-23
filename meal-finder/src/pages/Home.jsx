@@ -1,5 +1,5 @@
-import RandomMeal from "./randommeal";
-import Searchbar from "./searchbar";
+import RandomMeal from "../components/randommeal";
+import Searchbar from "../components/searchbar";
 
 export default function Home() {
   return (

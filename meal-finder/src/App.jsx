@@ -1,6 +1,6 @@
-import Mealinfo from "./components/mealinfo";
-import Home from "./components/Home";
-import Mealslector from "./components/mealselector";
+import Mealinfo from "./pages/mealinfo";
+import Home from "./pages/Home";
+import Mealslector from "./pages/mealselector";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
