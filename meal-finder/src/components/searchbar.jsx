@@ -21,12 +21,17 @@ export default function Searchbar() {
       >
         Meal Finder
       </h1>
-
+      <h2
+        onClick={() => navigate(`/savedmeals`)}
+        className="mealfinder hover:scale-105 transition-transform"
+      >
+        My Meals
+      </h2>
       <div className="flex flex-col md:flex-row items-center gap-2 w-full md:w-auto">
         <div className="flex items-center w-full md:w-auto">
           {" "}
           <input
-            className="searchbar rounded-lg p-1 w-full md:w-60"
+            className="w-full md:w-52 rounded-lg p-2 border border-2"
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -39,7 +44,6 @@ export default function Searchbar() {
             <i className="fa-solid fa-magnifying-glass"></i>
           </button>
         </div>
-
         <Category />
         <Areas />
       </div>

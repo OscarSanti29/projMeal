@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import Searchbar from "../components/searchbar";
 
 export default function Mealinfo() {
   const [info, setInfo] = useState(null);
@@ -13,9 +12,15 @@ export default function Mealinfo() {
           `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`
         );
         const data = await res.json();
-        setInfo(data.meals[0] || null);
+
+        if (data.meals && data.meals.length > 0) {
+          setInfo(data.meals[0]);
+          console.log("Fetched meal info:", data.meals[0]);
+        } else {
+          console.error("No meal found for id:", id);
+        }
       } catch (error) {
-        console.log("cannot get meal:", error);
+        console.log("Cannot get meal:", error);
       }
     }
     Mealdetails();
@@ -23,11 +28,9 @@ export default function Mealinfo() {
 
   function getIngredients(meal) {
     const ingredients = [];
-
     for (let i = 1; i <= 20; i++) {
       const ingredient = meal[`strIngredient${i}`];
       const measure = meal[`strMeasure${i}`];
-
       if (ingredient && ingredient.trim() !== "") {
         ingredients.push(`${measure} ${ingredient}`.trim());
       }
@@ -35,12 +38,41 @@ export default function Mealinfo() {
     return ingredients;
   }
 
+  function handleSaveMeal(meal) {
+    console.log("Trying to save meal:", meal);
+
+    if (!meal || !meal.idMeal) {
+      alert("Meal data not available yet — please wait a moment.");
+      console.error("Invalid meal:", meal);
+      return;
+    }
+
+    let savedMeals;
+    try {
+      const stored = localStorage.getItem("savedMeals");
+      savedMeals = stored ? JSON.parse(stored) : [];
+      if (!Array.isArray(savedMeals)) savedMeals = [];
+    } catch (e) {
+      console.error("Error reading saved meals:", e);
+      savedMeals = [];
+    }
+
+    const alreadySaved = savedMeals.some((m) => m.idMeal === meal.idMeal);
+    if (alreadySaved) {
+      alert("Recipe already saved!");
+      return;
+    }
+
+    savedMeals.push(meal);
+    localStorage.setItem("savedMeals", JSON.stringify(savedMeals));
+    alert("Recipe saved!");
+    console.log("Saved meals now:", savedMeals);
+  }
   if (!info)
     return <p className="text-center text-lg p-4">Loading meal info...</p>;
 
   return (
     <div>
-      <Searchbar />
       <h2 className="text-center text-2xl mt-6 mb-4">{info.strMeal}</h2>
 
       <div className="meal-info flex flex-col md:flex-row items-center md:items-start justify-center max-w-5xl mx-auto gap-6 p-4">
@@ -49,6 +81,7 @@ export default function Mealinfo() {
           alt={info.strMeal}
           className="w-64 h-64 object-cover rounded-full"
         />
+        <button onClick={() => handleSaveMeal(info)}>Save Recipe</button>
 
         <div className="text-lg space-y-3">
           <p>

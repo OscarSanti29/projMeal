@@ -37,7 +37,6 @@ export default function Mealslector() {
 
   return (
     <div>
-      <Searchbar />
       {query && (
         <h2 className="text-center text-2xl mt-4">Results for "{query}"</h2>
       )}
