@@ -31,6 +31,18 @@ export default function RandomMeal() {
     fetchMeal();
   }, []);
 
+  function getIngredients(meal) {
+    const ingredients = [];
+    for (let i = 1; i <= 20; i++) {
+      const ingredient = meal[`strIngredient${i}`];
+      const measure = meal[`strMeasure${i}`];
+      if (ingredient && ingredient.trim() !== "") {
+        ingredients.push(`${measure} ${ingredient}`.trim());
+      }
+    }
+    return ingredients;
+  }
+
   if (loading) {
     return <p className="text-center">Loading...</p>;
   }
@@ -46,25 +58,33 @@ export default function RandomMeal() {
           <h2 className="text-2xl text-center mb-4">
             Meal of the day: {meal.strMeal}
           </h2>
-          <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
-            <img
-              className="w-64 h-64 object-cover rounded-full"
-              src={meal.strMealThumb}
-              alt={meal.strMeal}
-            />
-            <div className="text-lg space-y-3">
-              <p>
-                <strong>Category:</strong> {meal.strCategory}
-              </p>
-              <p>
-                <strong>Area:</strong> {meal.strArea}
-              </p>
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-6 bg-orange-200 shadow-xl rounded-xl p-3 ">
+            <div className="grid">
+              <img
+                className="w-96 h-96 object-cover rounded-full"
+                src={meal.strMealThumb}
+                alt={meal.strMeal}
+              />
               <button
-                className="mt-2 px-4 py-2 bg-orange-300 border-black border-2 rounded-lg hover:bg-orange-400 transition"
+                className="mt-4 p-2 font-semibold w-1/2 m-auto text-xl bg-orange-300 border-black border-2 rounded-lg hover:bg-orange-400 transition"
                 onClick={() => nav(`/meal/${meal.idMeal}`)}
               >
                 See Recipe
               </button>
+            </div>
+
+            <div className="mx-3 my-20">
+              <p className="font-bold text-3xl">Category: {meal.strCategory}</p>
+              <p className="font-bold text-3xl">Region: {meal.strArea}</p>
+
+              <div className=" font-semibold text-lg">
+                Ingridients
+                <ul className="list-disc list-inside mt-1 grid grid-cols-2 ">
+                  {getIngredients(meal).map((item, index) => (
+                    <li key={index}>{item}</li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         </div>

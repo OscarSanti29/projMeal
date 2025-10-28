@@ -76,34 +76,46 @@ export default function Mealinfo() {
       <h2 className="text-center text-2xl mt-6 mb-4">{info.strMeal}</h2>
 
       <div className="meal-info flex flex-col md:flex-row items-center md:items-start justify-center max-w-5xl mx-auto gap-6 p-4">
-        <img
-          src={info.strMealThumb}
-          alt={info.strMeal}
-          className="w-64 h-64 object-cover rounded-full"
-        />
-        <button onClick={() => handleSaveMeal(info)}>Save Recipe</button>
+        <div className="grid">
+          {" "}
+          <img
+            src={info.strMealThumb}
+            alt={info.strMeal}
+            className="w-96 h-96 object-cover rounded-full"
+          />
+          <button
+            onClick={() => handleSaveMeal(info)}
+            className="border border-2 bg-orange-300 w-1/2 m-auto my-2 rounded-lg font-semibold cursor-pointer hover:bg-orange-400 transition"
+          >
+            Save Recipe
+          </button>
+        </div>
 
-        <div className="text-lg space-y-3">
-          <p>
-            <strong>Category:</strong> {info.strCategory}
-          </p>
-          <p>
-            <strong>Area:</strong> {info.strArea}
-          </p>
-          <p>
-            <strong>Video:</strong>{" "}
-            <a
-              href={info.strYoutube}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 underline"
-            >
-              Watch on YouTube
-            </a>
-          </p>
+        <div className="text-xl space-y-3 rounded-xl p-3 shadow-xl bg-orange-200">
           <div>
-            <strong>Ingredients:</strong>
-            <ul className="list-disc list-inside mt-1">
+            {" "}
+            <p>
+              <strong>Category:</strong> {info.strCategory}
+            </p>
+            <p>
+              <strong>Area:</strong> {info.strArea}
+            </p>
+            <p>
+              <strong>Video:</strong>{" "}
+              <a
+                href={info.strYoutube}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 underline"
+              >
+                Watch on YouTube
+              </a>
+            </p>
+          </div>
+
+          <div className=" font-semibold">
+            Ingridients
+            <ul className="list-disc list-inside mt-1 grid grid-cols-2 ">
               {getIngredients(info).map((item, index) => (
                 <li key={index}>{item}</li>
               ))}
@@ -112,9 +124,11 @@ export default function Mealinfo() {
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto p-4 text-lg">
-        <strong className="block mb-2">Instructions:</strong>
-        <p className="whitespace-pre-line">{info.strInstructions}</p>
+      <div className=" text-center p-2 text-lg bg-orange-200 ">
+        <strong className="text-5xl">Instructions:</strong>
+        <p className="whitespace-pre-line font-semibold">
+          {info.strInstructions}
+        </p>
       </div>
     </div>
   );
