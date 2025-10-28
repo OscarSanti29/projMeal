@@ -10,7 +10,7 @@ A responsive recipe search application built with React and Tailwind CSS, using 
 - **Frontend:** React, Vite, Tailwind CSS
 - **API:** TheMealDB API
 - **Routing:** React Router DOM
-- **Deployment:** Vercel (or Netlify)
+- **Deployment:** Netlify
 
 ## 🧠 Features
 
