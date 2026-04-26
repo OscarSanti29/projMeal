@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Mealslector from "./pages/mealselector";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { SavedRecipes } from "./pages/mealList";
+import ShoppingList from "./pages/ShoppingList";
 import Searchbar from "./components/searchbar";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
@@ -18,6 +19,7 @@ function App() {
           <Route path="/category/:category" element={<Mealslector />} />
           <Route path="/area/:area" element={<Mealslector />} />
           <Route path="/savedmeals" element={<SavedRecipes />} />
+          <Route path="/shopping" element={<ShoppingList />} />
         </Routes>
       </BrowserRouter>
     </>
