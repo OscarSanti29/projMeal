@@ -27,7 +27,7 @@ export default function Category() {
           nav(`/category/${e.target.value}`);
         }}
         value={selectedCategory}
-        className="w-full md:w-52 rounded-lg p-2 border border-2"
+        className="w-full md:w-52 rounded-xl p-1 bg-[#f5efe8] cursor-pointer font-bold"
       >
         <option value="">Select a category</option>
         {category.map((cat) => (

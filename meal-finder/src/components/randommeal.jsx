@@ -55,10 +55,10 @@ export default function RandomMeal() {
     <div className="max-w-4xl mx-auto p-4">
       {meal ? (
         <div>
-          <h2 className="text-2xl text-center mb-4">
+          <h2 className="mealfinder text-6xl text-[#2e1503] text-center mb-4">
             Meal of the day: {meal.strMeal}
           </h2>
-          <div className="flex flex-col md:flex-row items-center md:items-start gap-6 bg-orange-200 shadow-xl rounded-xl p-3 ">
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-6 bg-[#d9c4ae] shadow-xl rounded-xl p-3 ">
             <div className="grid">
               <img
                 className="w-96 h-96 object-cover rounded-full"
@@ -66,7 +66,7 @@ export default function RandomMeal() {
                 alt={meal.strMeal}
               />
               <button
-                className="mt-4 p-2 font-semibold w-1/2 m-auto text-xl bg-orange-300 border-black border-2 rounded-lg hover:bg-orange-400 transition"
+                className="mt-4 p-1 shadow-xl font-semibold w-1/2 m-auto text-xl bg-[#fdf3e7] rounded-lg hover:bg-[#c8562a] transition"
                 onClick={() => nav(`/meal/${meal.idMeal}`)}
               >
                 See Recipe

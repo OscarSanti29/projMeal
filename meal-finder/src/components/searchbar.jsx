@@ -20,37 +20,35 @@ export default function Searchbar() {
   };
 
   return (
-    <div className="bg-orange-300 border-b-4 border-black w-full">
+    <div className="bg-[#C8562A] border-b-4 border-[#d9c4ae] w-full ">
       {/* Main nav row */}
-      <div className="flex md:flex-row justify-between items-center gap-4 p-4">
+      <div className="flex flex-col md:flex-row items-center justify-between px-4 py-3 gap-4">
         <h1
-          className="mealfinder hover:scale-105 transition-transform cursor-pointer"
+          className="mealfinder text-7xl hover:scale-105 transition-transform cursor-pointer text-[#2e1503] hover:text-[#d9c4ae]"
           onClick={() => navigate("/")}
         >
           Meal Finder
         </h1>
 
-        <div className="flex flex-wrap items-center gap-2 justify-center">
+        <div className="">
           <h2
             onClick={() => navigate("/savedmeals")}
-            className="text-2xl font-bold cursor-pointer hover:scale-105 transition-transform"
-            style={{ fontFamily: '"Bungee Inline", sans-serif' }}
+            className="mealfinder text-5xl cursor-pointer hover:scale-105 transition-transform text-[#2e1503] hover:text-[#d9c4ae]"
           >
             My Meals
           </h2>
           <h2
             onClick={() => navigate("/shopping")}
-            className="text-2xl font-bold cursor-pointer hover:scale-105 transition-transform"
-            style={{ fontFamily: '"Bungee Inline", sans-serif' }}
+            className="mealfinder text-5xl cursor-pointer hover:scale-105 transition-transform text-[#2e1503] hover:text-[#d9c4ae]"
           >
-            🛒 Shopping
+            Grocery List
           </h2>
         </div>
 
-        <div className="flex flex-col md:flex-row items-center gap-2 w-full md:w-auto">
-          <div className="flex items-center w-full md:w-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="">
             <input
-              className="w-full md:w-52 rounded-lg p-2 border border-2"
+              className="w-full md:w-52 rounded-xl p-1 bg-[#f5efe8] cursor-pointer font-bold"
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -58,24 +56,22 @@ export default function Searchbar() {
               placeholder="Search meals..."
             />
             <button
-              className="ml-2 rounded-lg cursor-pointer text-xl"
+              className="ml-2 cursor-pointer text-xl"
               onClick={handleSearch}
             >
               <i className="fa-solid fa-magnifying-glass"></i>
             </button>
           </div>
-          <Category />
-          <Areas />
           <button
             onClick={() => setShowAI((v) => !v)}
-            className={`text-sm font-semibold px-3 py-2 rounded-lg border-2 border-orange-500 cursor-pointer transition ${
-              showAI
-                ? "bg-orange-500 text-white"
-                : "bg-white text-orange-600 hover:bg-orange-100"
+            className={`w-full md:w-52 rounded-xl p-1 bg-[#f5efe8] cursor-pointer font-bold ${
+              showAI ? "" : ""
             }`}
           >
-            ✨ AI Search
+            AI Search
           </button>
+          <Category />
+          <Areas />
         </div>
       </div>
 

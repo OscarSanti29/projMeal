@@ -13,7 +13,7 @@ export function SavedRecipes() {
 
   return (
     <div className="p-6">
-      <h2>Saved Recipes</h2>
+      <h2 className="mealfinder text-6xl text-[#2e1503]">Saved Recipes</h2>
       {savedMeals.length === 0 ? (
         <p>No saved recipes yet.</p>
       ) : (
@@ -21,10 +21,10 @@ export function SavedRecipes() {
           {savedMeals.map((meal) => (
             <div
               key={meal.idMeal}
-              className="bg-orange-300 rounded-lg shadow-md p-4 text-center hover:scale-105 transition-transform cursor-pointer"
+              className="bg-[#d9c4ae] mealfinder font-bold rounded-lg shadow-md p-4 text-center text-2xl hover:bg-[#c8562a] hover:scale-105 transition-transform cursor-pointer "
               onClick={() => nav(`/meal/${meal.idMeal}`)}
             >
-              <h3 className="my-2 font-semibold">{meal.strMeal}</h3>
+              <h3 className="my-2 text-2xl">{meal.strMeal}</h3>
               <img
                 src={meal.strMealThumb}
                 alt={meal.strMeal}

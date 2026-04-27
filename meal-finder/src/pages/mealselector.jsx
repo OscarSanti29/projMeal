@@ -38,15 +38,19 @@ export default function Mealslector() {
   return (
     <div>
       {query && (
-        <h2 className="text-center text-2xl mt-4">Results for "{query}"</h2>
+        <h2 className="mealfinder text-[#2e1503] text-6xl text-center text-2xl mt-4">
+          Results for "{query}"
+        </h2>
       )}
       {category && (
-        <h2 className="text-center text-2xl mt-4">
+        <h2 className="mealfinder text-[#2e1503] text-6xl text-center text-2xl mt-4">
           Meals in "{category}" category
         </h2>
       )}
       {area && (
-        <h2 className="text-center text-2xl mt-4">Meals in "{area}" region</h2>
+        <h2 className="mealfinder text-[#2e1503] text-6xl text-center text-2xl mt-4">
+          Meals in "{area}" region
+        </h2>
       )}
 
       {loading ? (
@@ -57,10 +61,12 @@ export default function Mealslector() {
             meals.map((meal) => (
               <div
                 key={meal.idMeal}
-                className="bg-orange-300 rounded-lg shadow-md p-4 text-center hover:scale-105 transition-transform cursor-pointer"
+                className="bg-[#D9C4AE] rounded-lg shadow-md p-4 text-center hover:scale-105 transition-transform cursor-pointer hover:bg-[#C8562A]"
                 onClick={() => nav(`/meal/${meal.idMeal}`)}
               >
-                <h3 className="my-2 font-semibold">{meal.strMeal}</h3>
+                <h3 className="my-2 mealfinder font-bold text-2xl">
+                  {meal.strMeal}
+                </h3>
                 <img
                   src={meal.strMealThumb}
                   alt={meal.strMeal}

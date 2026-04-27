@@ -4,23 +4,37 @@ import NutritionPanel from "../components/NutritionPanel";
 
 export default function Mealinfo() {
   const [info, setInfo] = useState(null);
+  const [error, setError] = useState(null);
   const { id } = useParams();
 
   useEffect(() => {
+    const controller = new AbortController();
+
     async function Mealdetails() {
       try {
         const res = await fetch(
           `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`,
+          { signal: controller.signal },
         );
+
+        if (!res.ok) throw new Error(`API error: ${res.status}`);
+
         const data = await res.json();
         if (data.meals && data.meals.length > 0) {
           setInfo(data.meals[0]);
+        } else {
+          setError("Meal not found.");
         }
       } catch (error) {
-        console.log("Cannot get meal:", error);
+        if (error.name !== "AbortError") {
+          console.log("Cannot get meal:", error);
+          setError("Failed to load meal. Please try again.");
+        }
       }
     }
+
     Mealdetails();
+    return () => controller.abort();
   }, [id]);
 
   function getIngredients(meal) {
@@ -60,6 +74,9 @@ export default function Mealinfo() {
     alert("Recipe saved!");
   }
 
+  if (error)
+    return <p className="text-center text-red-500 text-lg p-4">{error}</p>;
+
   if (!info)
     return <p className="text-center text-lg p-4">Loading meal info...</p>;
 
@@ -78,7 +95,7 @@ export default function Mealinfo() {
           />
           <button
             onClick={() => handleSaveMeal(info)}
-            className="border border-2 bg-orange-300 w-1/2 m-auto my-2 rounded-lg font-semibold cursor-pointer hover:bg-orange-400 transition"
+            className="border-2 bg-orange-300 w-1/2 m-auto my-2 rounded-lg font-semibold cursor-pointer hover:bg-orange-400 transition"
           >
             Save Recipe
           </button>
@@ -92,17 +109,19 @@ export default function Mealinfo() {
             <p>
               <strong>Area:</strong> {info.strArea}
             </p>
-            <p>
-              <strong>Video:</strong>{" "}
-              <a
-                href={info.strYoutube}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 underline"
-              >
-                Watch on YouTube
-              </a>
-            </p>
+            {info.strYoutube && (
+              <p>
+                <strong>Video:</strong>{" "}
+                <a
+                  href={info.strYoutube}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 underline"
+                >
+                  Watch on YouTube
+                </a>
+              </p>
+            )}
           </div>
 
           <div className="font-semibold">

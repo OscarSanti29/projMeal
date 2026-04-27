@@ -67,8 +67,10 @@ export default function ShoppingList() {
 
   if (savedMeals.length === 0) {
     return (
-      <div className="max-w-2xl mx-auto p-8 text-center">
-        <h2 className="text-2xl font-bold mb-4">🛒 Shopping List</h2>
+      <div className="max-w-4xl mx-auto p-8 text-center">
+        <h2 className="text-6xl mealfinder text-[#2e1503] mb-4">
+          Shopping List
+        </h2>
         <p className="text-gray-500">
           Save some meals first and your shopping list will be generated here!
         </p>
@@ -77,81 +79,120 @@ export default function ShoppingList() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
+    <div className="max-w-5xl mx-auto p-6">
+      {/* Header */}
       <div className="flex items-center justify-between mb-2">
-        <h2 className="text-2xl font-bold">🛒 Shopping List</h2>
+        <h2 className="text-6xl mealfinder text-[#2e1503]">Shopping List</h2>
         <button
           onClick={copyList}
-          className="bg-orange-400 hover:bg-orange-500 text-white text-sm font-semibold px-4 py-2 rounded-lg transition cursor-pointer"
+          className="bg-[#e8962a] hover:bg-[#c8562a] text-white text-sm font-semibold px-4 py-2 rounded-lg transition cursor-pointer"
         >
           {copied ? "✓ Copied!" : "Copy List"}
         </button>
       </div>
 
-      <p className="text-sm text-gray-500 mb-5">
+      <p className="text-md font-semibold text-gray-500 mb-6">
         Combined ingredients from {savedMeals.length} saved meal
         {savedMeals.length !== 1 ? "s" : ""}:{" "}
-        <span className="font-semibold text-orange-600">
+        <span className="font-bold text-[#e8962a]">
           {savedMeals.map((m) => m.strMeal).join(", ")}
         </span>
       </p>
 
-      {/* Unchecked items */}
-      <div className="space-y-2 mb-6">
-        {unchecked.map((item) => {
-          const key = item.ingredient.toLowerCase();
-          return (
-            <div
-              key={key}
-              onClick={() => toggle(key)}
-              className="flex items-start gap-3 bg-orange-50 border border-orange-200 rounded-lg px-4 py-3 cursor-pointer hover:bg-orange-100 transition"
-            >
-              <div className="w-5 h-5 border-2 border-orange-400 rounded mt-0.5 flex-shrink-0" />
-              <div className="flex-1">
-                <span className="font-semibold text-gray-800">
-                  {item.ingredient}
-                </span>
-                {item.measures.length > 0 && (
-                  <span className="text-sm text-gray-500 ml-2">
-                    — {item.measures.join(", ")}
-                  </span>
-                )}
-                {item.meals.length > 1 && (
-                  <p className="text-xs text-orange-500 mt-0.5">
-                    Used in: {item.meals.join(", ")}
-                  </p>
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Checked items */}
-      {checkedItems.length > 0 && (
+      {/* Two-column layout */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Left column — Still need */}
         <div>
-          <p className="text-sm text-gray-400 font-semibold mb-2">
-            ✓ Got it ({checkedItems.length})
-          </p>
-          <div className="space-y-2 opacity-40">
-            {checkedItems.map((item) => {
-              const key = item.ingredient.toLowerCase();
-              return (
-                <div
-                  key={key}
-                  onClick={() => toggle(key)}
-                  className="flex items-start gap-3 bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 cursor-pointer"
-                >
-                  <div className="w-5 h-5 border-2 border-gray-400 rounded mt-0.5 flex-shrink-0 bg-gray-400" />
-                  <span className="line-through text-gray-500">
-                    {item.ingredient}
-                  </span>
-                </div>
-              );
-            })}
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-3 h-3 rounded-full bg-[#e8962a]" />
+            <h3 className="font-bold text-lg text-[#2e1503]">
+              Still Need ({unchecked.length})
+            </h3>
+          </div>
+          <div className="space-y-2">
+            {unchecked.length === 0 ? (
+              <p className="text-gray-400 text-sm italic px-1">
+                All done! Everything's in the cart.
+              </p>
+            ) : (
+              unchecked.map((item) => {
+                const key = item.ingredient.toLowerCase();
+                return (
+                  <div
+                    key={key}
+                    onClick={() => toggle(key)}
+                    className="flex items-start gap-3 border border-[#e8962a] rounded-lg px-4 py-3 cursor-pointer hover:bg-orange-50 transition"
+                  >
+                    <div className="w-5 h-5 border-2 border-[#2e1503] rounded mt-0.5 flex-shrink-0" />
+                    <div className="flex-1">
+                      <span className="font-semibold text-gray-800">
+                        {item.measures.length > 0 && (
+                          <span className="text-[#c8562a] font-normal mr-1">
+                            {item.measures.join(" + ")}
+                          </span>
+                        )}
+                        {item.ingredient}
+                      </span>
+                      {item.meals.length > 1 && (
+                        <p className="text-xs text-[#e8962a] mt-0.5">
+                          Used in: {item.meals.join(", ")}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
-      )}
+
+        {/* Right column — Already got */}
+        <div>
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-3 h-3 rounded-full bg-green-500" />
+            <h3 className="font-bold text-lg text-[#2e1503]">
+              Already Got ({checkedItems.length})
+            </h3>
+          </div>
+          <div className="space-y-2">
+            {checkedItems.length === 0 ? (
+              <p className="text-gray-400 text-sm italic px-1">
+                Tap an item on the left to mark it as gotten.
+              </p>
+            ) : (
+              checkedItems.map((item) => {
+                const key = item.ingredient.toLowerCase();
+                return (
+                  <div
+                    key={key}
+                    onClick={() => toggle(key)}
+                    className="flex items-start gap-3 bg-green-50 border border-green-200 rounded-lg px-4 py-3 cursor-pointer hover:bg-green-100 transition"
+                  >
+                    <div className="w-5 h-5 border-2 border-green-500 rounded mt-0.5 flex-shrink-0 bg-green-500 flex items-center justify-center">
+                      <svg
+                        className="w-3 h-3 text-white"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={3}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    </div>
+                    <span className="line-through text-gray-400 font-semibold">
+                      {item.ingredient}
+                    </span>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
