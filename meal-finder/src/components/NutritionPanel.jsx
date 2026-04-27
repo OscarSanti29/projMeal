@@ -1,6 +1,48 @@
 import { useState } from "react";
 import { getNutrition } from "../api/APIFunctions";
 
+function parseFraction(str) {
+  if (!str) return 1;
+  if (str.includes("/")) {
+    const [a, b] = str.split("/");
+    return parseFloat(a) / parseFloat(b);
+  }
+  return parseFloat(str) || 1;
+}
+
+function toGrams(measure) {
+  if (!measure) return 100;
+  const m = measure.toLowerCase().trim();
+  const gMatch = m.match(/^([\d.\/]+)\s*g\b/);
+  if (gMatch) return parseFraction(gMatch[1]);
+  const kgMatch = m.match(/^([\d.\/]+)\s*kg\b/);
+  if (kgMatch) return parseFraction(kgMatch[1]) * 1000;
+  const ozMatch = m.match(/^([\d.\/]+)\s*oz/);
+  if (ozMatch) return parseFraction(ozMatch[1]) * 28.35;
+  const lbMatch = m.match(/^([\d.\/]+)\s*lb/);
+  if (lbMatch) return parseFraction(lbMatch[1]) * 453.6;
+  const cupMatch = m.match(/^([\d.\/]+)\s*cup/);
+  if (cupMatch) return parseFraction(cupMatch[1]) * 240;
+  const tbspMatch = m.match(/^([\d.\/]+)\s*(tbsp|tablespoon)/);
+  if (tbspMatch) return parseFraction(tbspMatch[1]) * 15;
+  const tspMatch = m.match(/^([\d.\/]+)\s*(tsp|teaspoon)/);
+  if (tspMatch) return parseFraction(tspMatch[1]) * 5;
+  const mlMatch = m.match(/^([\d.\/]+)\s*ml/);
+  if (mlMatch) return parseFraction(mlMatch[1]);
+  const numMatch = m.match(/^([\d.\/]+)/);
+  if (numMatch) return parseFraction(numMatch[1]) * 150;
+  if (m.includes("pinch") || m.includes("taste") || m.includes("garnish"))
+    return 2;
+  return 100;
+}
+
+function parseIngredientLine(fullString) {
+  const words = fullString.trim().split(/\s+/);
+  const ingredientName = words.slice(-2).join(" ");
+  const measure = words.slice(0, -2).join(" ") || "";
+  return { ingredientName, measure };
+}
+
 export default function NutritionPanel({ ingredients }) {
   const [nutrition, setNutrition] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -14,12 +56,22 @@ export default function NutritionPanel({ ingredients }) {
     setLoading(true);
     setOpen(true);
     try {
-      // Only fetch first 8 ingredients to stay fast
-      const topIngredients = ingredients.slice(0, 8);
+      const top = ingredients.slice(0, 10);
       const results = await Promise.all(
-        topIngredients.map((ing) => {
-          const name = ing.split(" ").slice(-2).join(" "); // strip measure
-          return getNutrition(name);
+        top.map(async (fullIng) => {
+          const { ingredientName, measure } = parseIngredientLine(fullIng);
+          const data = await getNutrition(ingredientName);
+          if (!data || data.calories === null) return null;
+          const grams = toGrams(measure);
+          const factor = grams / 100;
+          return {
+            name: ingredientName,
+            grams: Math.round(grams),
+            calories: Math.round((data.calories || 0) * factor),
+            protein: +((data.protein || 0) * factor).toFixed(1),
+            carbs: +((data.carbs || 0) * factor).toFixed(1),
+            fat: +((data.fat || 0) * factor).toFixed(1),
+          };
         }),
       );
       setNutrition(results.filter(Boolean));
@@ -30,9 +82,15 @@ export default function NutritionPanel({ ingredients }) {
     }
   };
 
-  const totalCalories = nutrition
-    .reduce((sum, n) => sum + (n.calories || 0), 0)
-    .toFixed(0);
+  const totals = nutrition.reduce(
+    (acc, n) => ({
+      calories: acc.calories + n.calories,
+      protein: +(acc.protein + n.protein).toFixed(1),
+      carbs: +(acc.carbs + n.carbs).toFixed(1),
+      fat: +(acc.fat + n.fat).toFixed(1),
+    }),
+    { calories: 0, protein: 0, carbs: 0, fat: 0 },
+  );
 
   return (
     <div className="mt-4">
@@ -46,46 +104,56 @@ export default function NutritionPanel({ ingredients }) {
       {open && (
         <div className="mt-3 bg-green-50 border border-green-200 rounded-xl p-4">
           <h3 className="font-bold text-green-800 text-base mb-3">
-            Nutrition Breakdown{" "}
-            <span className="text-xs font-normal text-green-600">
-              (per 100g per ingredient)
+            Estimated Meal Nutrition
+            <span className="text-xs font-normal text-green-600 ml-2">
+              (based on recipe amounts)
             </span>
           </h3>
 
           {loading ? (
-            <p className="text-green-700 text-sm">Fetching nutrition data...</p>
+            <p className="text-green-700 text-sm animate-pulse">
+              Calculating nutrition...
+            </p>
           ) : nutrition.length === 0 ? (
             <p className="text-sm text-red-500">No nutrition data found.</p>
           ) : (
             <>
-              <div className="grid grid-cols-3 gap-2 mb-4">
-                <div className="bg-white rounded-lg p-2 text-center border border-green-200">
-                  <p className="text-xs text-green-600">Est. Calories</p>
-                  <p className="text-xl font-bold text-green-800">
-                    {totalCalories}
-                  </p>
-                  <p className="text-xs text-green-500">kcal total</p>
-                </div>
-                <div className="bg-white rounded-lg p-2 text-center border border-green-200">
-                  <p className="text-xs text-green-600">Ingredients tracked</p>
-                  <p className="text-xl font-bold text-green-800">
-                    {nutrition.length}
-                  </p>
-                  <p className="text-xs text-green-500">
-                    of {ingredients.length}
-                  </p>
-                </div>
-                <div className="bg-white rounded-lg p-2 text-center border border-green-200">
-                  <p className="text-xs text-green-600">Avg Protein</p>
-                  <p className="text-xl font-bold text-green-800">
-                    {(
-                      nutrition.reduce((s, n) => s + (n.protein || 0), 0) /
-                      nutrition.length
-                    ).toFixed(1)}
-                    g
-                  </p>
-                  <p className="text-xs text-green-500">per ingredient</p>
-                </div>
+              <div className="grid grid-cols-4 gap-2 mb-4">
+                {[
+                  {
+                    label: "Total Calories",
+                    value: totals.calories,
+                    unit: "kcal",
+                    color: "text-orange-600",
+                  },
+                  {
+                    label: "Protein",
+                    value: `${totals.protein}g`,
+                    unit: "",
+                    color: "text-blue-600",
+                  },
+                  {
+                    label: "Carbs",
+                    value: `${totals.carbs}g`,
+                    unit: "",
+                    color: "text-yellow-600",
+                  },
+                  {
+                    label: "Fat",
+                    value: `${totals.fat}g`,
+                    unit: "",
+                    color: "text-red-500",
+                  },
+                ].map(({ label, value, unit, color }) => (
+                  <div
+                    key={label}
+                    className="bg-white rounded-lg p-2 text-center border border-green-200"
+                  >
+                    <p className="text-xs text-green-600">{label}</p>
+                    <p className={`text-lg font-bold ${color}`}>{value}</p>
+                    {unit && <p className="text-xs text-green-500">{unit}</p>}
+                  </div>
+                ))}
               </div>
 
               <div className="overflow-x-auto">
@@ -93,7 +161,8 @@ export default function NutritionPanel({ ingredients }) {
                   <thead>
                     <tr className="text-green-700 border-b border-green-200">
                       <th className="text-left py-1">Ingredient</th>
-                      <th className="text-right py-1">Calories</th>
+                      <th className="text-right py-1">~Amount</th>
+                      <th className="text-right py-1">Cal</th>
                       <th className="text-right py-1">Protein</th>
                       <th className="text-right py-1">Carbs</th>
                       <th className="text-right py-1">Fat</th>
@@ -103,25 +172,31 @@ export default function NutritionPanel({ ingredients }) {
                     {nutrition.map((n, i) => (
                       <tr key={i} className="border-b border-green-100">
                         <td className="py-1 capitalize">{n.name}</td>
-                        <td className="text-right py-1">
-                          {n.calories ? `${n.calories.toFixed(0)} kcal` : "—"}
+                        <td className="text-right py-1 text-green-600">
+                          {n.grams}g
                         </td>
-                        <td className="text-right py-1">
-                          {n.protein ? `${n.protein.toFixed(1)}g` : "—"}
-                        </td>
-                        <td className="text-right py-1">
-                          {n.carbs ? `${n.carbs.toFixed(1)}g` : "—"}
-                        </td>
-                        <td className="text-right py-1">
-                          {n.fat ? `${n.fat.toFixed(1)}g` : "—"}
-                        </td>
+                        <td className="text-right py-1">{n.calories}</td>
+                        <td className="text-right py-1">{n.protein}g</td>
+                        <td className="text-right py-1">{n.carbs}g</td>
+                        <td className="text-right py-1">{n.fat}g</td>
                       </tr>
                     ))}
                   </tbody>
+                  <tfoot>
+                    <tr className="font-bold text-green-800 border-t-2 border-green-300">
+                      <td className="py-1" colSpan={2}>
+                        Total
+                      </td>
+                      <td className="text-right py-1">{totals.calories}</td>
+                      <td className="text-right py-1">{totals.protein}g</td>
+                      <td className="text-right py-1">{totals.carbs}g</td>
+                      <td className="text-right py-1">{totals.fat}g</td>
+                    </tr>
+                  </tfoot>
                 </table>
               </div>
               <p className="text-xs text-green-500 mt-2">
-                * Data from Open Food Facts, estimated values per 100g
+                * Estimates from Open Food Facts. Actual values may vary.
               </p>
             </>
           )}

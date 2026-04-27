@@ -29,23 +29,10 @@ export async function getMealById(id) {
 export async function getNutrition(ingredientName) {
   try {
     const res = await fetch(
-      `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(
-        ingredientName,
-      )}&search_simple=1&action=process&json=1&page_size=1`,
+      `/.netlify/functions/nutrition?ingredient=${encodeURIComponent(ingredientName)}`,
     );
     if (!res.ok) return null;
-    const data = await res.json();
-    if (data.products && data.products.length > 0) {
-      const p = data.products[0];
-      return {
-        name: ingredientName,
-        calories: p.nutriments?.["energy-kcal_100g"] ?? null,
-        protein: p.nutriments?.proteins_100g ?? null,
-        carbs: p.nutriments?.carbohydrates_100g ?? null,
-        fat: p.nutriments?.fat_100g ?? null,
-      };
-    }
-    return null;
+    return await res.json();
   } catch {
     return null;
   }

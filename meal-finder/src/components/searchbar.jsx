@@ -22,7 +22,7 @@ export default function Searchbar() {
   return (
     <div className="bg-orange-300 border-b-4 border-black w-full">
       {/* Main nav row */}
-      <div className="flex flex-col md:flex-row justify-between items-center gap-4 p-4">
+      <div className="flex md:flex-row justify-between items-center gap-4 p-4">
         <h1
           className="mealfinder hover:scale-105 transition-transform cursor-pointer"
           onClick={() => navigate("/")}
