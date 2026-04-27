@@ -28,7 +28,8 @@ export async function handler(event) {
       body: JSON.stringify({ error: "Missing query" }),
     };
   }
-
+  console.log("API key present:", !!apiKey);
+  console.log("Query received:", query);
   try {
     const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
@@ -43,11 +44,21 @@ export async function handler(event) {
         messages: [
           {
             role: "user",
-            content: `You are a meal search assistant. The user wants to find meals with this request: "${query}".
+            content: `You are a meal search assistant for TheMealDB. The user wants: "${query}".
 
-Extract 1-3 search terms to query TheMealDB API (search by meal name). TheMealDB searches by meal name only.
-Return ONLY a JSON array of search terms, no other text. Example: ["chicken", "pasta"]
-Keep terms simple and broad. If user mentions calories or nutrition, suggest ingredient-based meal names instead.`,
+TheMealDB only supports searching by meal name. Your job is to think of 3-5 SPECIFIC, DIVERSE meal names that match the user's request.
+
+Rules:
+- Return actual dish names, not generic ingredients like "chicken" or "pasta"
+- Each term must be a different dish — no repeats or near-duplicates
+- Be specific: "butter chicken" not just "chicken", "spaghetti carbonara" not just "pasta"
+- If the user mentions a cuisine, mood, or ingredient, think of real dishes from that context
+- If user says "spicy", think: "chilli", "jerk chicken", "vindaloo", "szechuan"
+- If user says "comfort food", think: "shepherd's pie", "mac and cheese", "beef stew"
+- If user says "healthy" or "low calorie", think: "grilled salmon", "tuna salad", "vegetable soup"
+- If user mentions an ingredient, think of dishes that feature it prominently
+
+Return ONLY a JSON array of meal name strings, no explanation, no markdown. Example: ["butter chicken", "chicken tikka masala", "jerk chicken", "chicken shawarma"]`,
           },
         ],
       }),

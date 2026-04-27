@@ -8,13 +8,24 @@ async function aiSearchTerms(userQuery) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query: userQuery }),
   });
+
   if (!res.ok) throw new Error("AI search request failed");
+
   const data = await res.json();
-  const text = data.content?.[0]?.text || '[""]';
+
+  // Log the raw response so we can see what's coming back
+  console.log("Raw API response:", data);
+
+  const text = data.content?.[0]?.text || "";
+  console.log("Extracted text:", text);
+
   try {
     const clean = text.replace(/```json|```/g, "").trim();
-    return JSON.parse(clean);
+    const parsed = JSON.parse(clean);
+    // Filter out any empty strings
+    return parsed.filter((t) => t && t.trim() !== "");
   } catch {
+    console.error("Failed to parse:", text);
     return [userQuery];
   }
 }
@@ -31,13 +42,17 @@ export default function AISearch() {
     setAiResults(null);
     try {
       const terms = await aiSearchTerms(query);
+      console.log("AI suggested terms:", terms);
       const resultsArrays = await Promise.all(terms.map(searchMealsByName));
       const seen = new Set();
-      const merged = resultsArrays.flat().filter((m) => {
-        if (!m || seen.has(m.idMeal)) return false;
-        seen.add(m.idMeal);
-        return true;
-      });
+      const merged = resultsArrays
+        .flat()
+        .filter((m) => {
+          if (!m || seen.has(m.idMeal)) return false;
+          seen.add(m.idMeal);
+          return true;
+        })
+        .slice(0, 20); // cap at 20 results
       setAiResults(merged);
     } catch (err) {
       console.error("AI search failed:", err);
