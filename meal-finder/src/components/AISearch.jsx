@@ -68,10 +68,9 @@ export default function AISearch() {
 
   return (
     <div className="w-full">
-      <div className="flex items-center gap-2 bg-orange-50 border-2 border-orange-400 rounded-xl px-3 py-2">
-        <span className="text-orange-500 text-lg">✨</span>
+      <div className="flex items-center gap-2 bg-[#f5efe8] rounded-xl px-3 py-2">
         <input
-          className="flex-1 bg-transparent outline-none text-sm placeholder:text-orange-300"
+          className="flex-1 outline-none text-md font-bold "
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -81,7 +80,7 @@ export default function AISearch() {
         <button
           onClick={handleAISearch}
           disabled={loading}
-          className="bg-orange-400 hover:bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-lg transition disabled:opacity-50 cursor-pointer"
+          className="bg-[#e8962a] hover:bg-[#c8562a] text-white text-xs font-semibold px-3 py-1 rounded-lg transition disabled:opacity-50 cursor-pointer"
         >
           {loading ? "..." : "AI Search"}
         </button>
@@ -95,8 +94,8 @@ export default function AISearch() {
             </p>
           ) : (
             <>
-              <p className="text-sm text-orange-600 font-semibold mb-3">
-                ✨ AI found {aiResults.length} meal
+              <p className="text-3xl mealfinder text-[#2e1503] font-semibold mb-3">
+                AI found {aiResults.length} meal
                 {aiResults.length !== 1 ? "s" : ""} for you:
               </p>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
@@ -104,14 +103,16 @@ export default function AISearch() {
                   <div
                     key={meal.idMeal}
                     onClick={() => navigate(`/meal/${meal.idMeal}`)}
-                    className="bg-orange-200 rounded-lg p-3 text-center cursor-pointer hover:scale-105 transition-transform shadow-sm"
+                    className="bg-[#d9c4ae] rounded-lg p-3 text-center cursor-pointer hover:scale-105 transition"
                   >
+                    <p className="mealfinder text-[#2e1503] font-semibold mb-2">
+                      {meal.strMeal}
+                    </p>
                     <img
                       src={meal.strMealThumb}
                       alt={meal.strMeal}
                       className="w-full rounded-lg mb-2"
                     />
-                    <p className="text-xs font-semibold">{meal.strMeal}</p>
                   </div>
                 ))}
               </div>

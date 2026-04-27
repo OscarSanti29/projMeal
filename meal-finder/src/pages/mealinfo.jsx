@@ -84,7 +84,9 @@ export default function Mealinfo() {
 
   return (
     <div>
-      <h2 className="text-center text-2xl mt-6 mb-4">{info.strMeal}</h2>
+      <h2 className="mealfinder text-center text-6xl text-[#2e1503] mt-6 mb-4">
+        {info.strMeal}
+      </h2>
 
       <div className="meal-info flex flex-col md:flex-row items-center md:items-start justify-center max-w-5xl mx-auto gap-6 p-4">
         <div className="grid">
@@ -95,28 +97,28 @@ export default function Mealinfo() {
           />
           <button
             onClick={() => handleSaveMeal(info)}
-            className="border-2 bg-orange-300 w-1/2 m-auto my-2 rounded-lg font-semibold cursor-pointer hover:bg-orange-400 transition"
+            className="bg-[#e8962a] w-1/2 m-auto my-2 text-xl text-[#fdf3e7] rounded-lg font-semibold cursor-pointer hover:bg-[#c8562a] transition"
           >
             Save Recipe
           </button>
         </div>
 
-        <div className="text-xl space-y-3 rounded-xl p-3 shadow-xl bg-orange-200 w-full md:max-w-lg">
+        <div className="text-2xl space-y-3 rounded-xl p-3 shadow-xl bg-[#d9c4ae] w-full md:max-w-lg">
           <div>
-            <p>
-              <strong>Category:</strong> {info.strCategory}
+            <p className="mealfinder font-semibold text-[#2e1503]">
+              Category: {info.strCategory}
             </p>
-            <p>
-              <strong>Area:</strong> {info.strArea}
+            <p className="mealfinder font-semibold text-[#2e1503]">
+              Area: {info.strArea}
             </p>
             {info.strYoutube && (
-              <p>
-                <strong>Video:</strong>{" "}
+              <p className="font-semibold mealfinder text-[#2e1503]">
+                Video:{" "}
                 <a
                   href={info.strYoutube}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 underline"
+                  className="text-[#e8962a] font-semibold underline hover:text-[#c8562a] transition"
                 >
                   Watch on YouTube
                 </a>
@@ -124,7 +126,7 @@ export default function Mealinfo() {
             )}
           </div>
 
-          <div className="font-semibold">
+          <div className="font-semibold mealfinder text-[#2e1503]">
             Ingredients
             <ul className="list-disc list-inside mt-1 grid grid-cols-2 text-base">
               {ingredients.map((item, index) => (
@@ -138,7 +140,7 @@ export default function Mealinfo() {
         </div>
       </div>
 
-      <div className="text-center p-2 text-lg bg-orange-200">
+      <div className="text-center p-2 text-xl bg-[#c8562a] text-[#fdf3e7] border-6 border-[#d9c4ae] max-w-7xl mx-auto rounded-xl shadow-lg mb-6">
         <strong className="text-5xl">Instructions:</strong>
         <p className="whitespace-pre-line font-semibold">
           {info.strInstructions}
